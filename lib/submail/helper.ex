@@ -33,14 +33,14 @@ defmodule Submail.Helper do
   """
   def remove_nil(map) when is_map(map) do
     map
-    |> Enum.reject(fn({key, value}) -> value == nil end)
+    |> Enum.reject(fn({_key, value}) -> value == nil end)
     |> Enum.into(%{})
   end
 
   @doc """
   Transform from the `struct` to form submit data.
 
-      iex>Submail.Helper.struct_to_form(%Submail.Sms.Single{to: "223344"})
+      iex>Submail.Helper.struct_to_form(%Submail.Sms.Base.Single{to: "223344"})
       "to=223344"
   """
   def struct_to_form(struct) do

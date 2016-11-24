@@ -5,8 +5,8 @@ defmodule Submail do
   """
 
   defmacro __using__(config) do
-    appid = config[:appid] || raise "You need set the appid before start."
-    appkey = config[:appkey] || raise "You need set the appkey before start."
+    appid = config[:appid]
+    appkey = config[:appkey]
 
     quote do
       @doc """
