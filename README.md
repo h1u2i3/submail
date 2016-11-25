@@ -29,7 +29,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
     ```elixir
       alias Submail.Sms
 
-      %{}
+      []
       |> Sms.add_appid("appid")
       |> Sms.add_appkey("appkey")
       |> Sms.add_project("project")
@@ -46,7 +46,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
       use Submail.Sms, project: project
     end
 
-    %{}
+    []
     |> Sms.Register.add_to("13888888888")
     |> Sms.Register.add_vars(code: "668726")
     |> Sms.Register.xsend

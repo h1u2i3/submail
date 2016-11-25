@@ -8,7 +8,7 @@ defmodule SubmailTest do
   test "should generate the functions" do
     functions = SubmailSms.__info__(:functions) |> Keyword.keys
 
-    assert [:appid, :appkey] == functions
+    assert [:add_appid, :add_appkey, :appid, :appkey] == functions
   end
 
   test "generated function should get the right value" do

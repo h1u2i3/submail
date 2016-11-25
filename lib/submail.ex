@@ -18,6 +18,21 @@ defmodule Submail do
       Get the appkey.
       """
       def appkey, do: unquote(appkey)
+
+      @doc """
+      Helper method to add target.
+      """
+      def add_appid(struct, appid_string) when is_map(struct) do
+        [{:appid, appid_string} | struct]
+      end
+
+      @doc """
+      Helper method to add message.
+      """
+      def add_appkey(struct, appkey_string) when is_map(struct) do
+        [{:appkey, appkey_string} | struct]
+      end
     end
+
   end
 end

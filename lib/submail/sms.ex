@@ -6,7 +6,7 @@ defmodule Submail.Sms do
 
       alias Submail.Sms
 
-      %{}
+      []
       |> Sms.add_appid("appid")
       |> Sms.add_appkey("appkey")
       |> Sms.add_project("project")
@@ -16,20 +16,6 @@ defmodule Submail.Sms do
   """
   use Submail
   use Submail.Sms.Base
-
-  @doc """
-  Helper method to add target.
-  """
-  def add_appid(struct, appid) when is_map(struct) do
-    struct |> Map.put(:appid, appid)
-  end
-
-  @doc """
-  Helper method to add message.
-  """
-  def add_appkey(struct, appkey) when is_map(struct) do
-    struct |> Map.put(:signature, appkey)
-  end
 
   defmacro __using__(config) do
     quote do

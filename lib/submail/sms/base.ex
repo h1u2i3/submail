@@ -9,7 +9,7 @@ defmodule Submail.Sms.Base do
         use Submail.Sms, project: "project"
       end
 
-      %{}
+      []
       |> Sms.Code.add_to("13888888888")
       |> Sms.Code.add_vars(code: "132456")
       |> Sms.Code.xsend
@@ -26,35 +26,42 @@ defmodule Submail.Sms.Base do
       alias Submail.Sms.Base.Multi
 
       @endpoint       "https://api.submail.cn/message"
-      @xsend_url      @endpoint <>"/xsend"
-      @multixsend_url @endpoint <> "/multixsend"
+      @test_url       "http://localhost:8080/post"
+
+      if Mix.env == :test do
+        @xsend_url      @test_url
+        @multixsend_url @test_url
+      else
+        @xsend_url      @endpoint <>"/xsend"
+        @multixsend_url @endpoint <> "/multixsend"
+      end
 
       @doc """
       Helper method to add target.
       """
-      def add_to(struct, cellphone) when is_map(struct) do
-        struct |> Map.put(:to, cellphone)
+      def add_to(struct, cellphone) when is_list(struct) do
+        [{:to, cellphone} | struct]
       end
 
       @doc """
       Helper method to add message.
       """
-      def add_vars(struct, params) when is_map(struct) do
-        struct |> Map.put(:vars, params |> Enum.into(%{}))
+      def add_vars(struct, params) when is_list(struct) do
+        [{:vars, params |> Enum.into(%{})} | struct]
       end
 
       @doc """
       Helper method to add project
       """
-      def add_project(struct, project) when is_map(struct) do
-        struct |> Map.put(:project, project)
+      def add_project(struct, project) when is_list(struct) do
+        [{:project, project} | struct]
       end
 
       @doc """
       Helper method to add multi in multixsend.
       """
-      def add_multi(struct, multi) when is_map(struct) do
-        struct |> Map.put(:multi, multi |> Enum.into(%{}))
+      def add_multi(struct, multi) when is_list(struct) do
+        [{:multi, multi |> Enum.into(%{})} | struct]
       end
 
       @doc """
@@ -65,26 +72,30 @@ defmodule Submail.Sms.Base do
       @doc """
       Single send sms with `xsend`
       """
-      def xsend(struct) do
-        struct = struct |> add_config_data
-        data = struct(Single, struct) |> struct_to_form
-        Http.post(@xsend_url, data)
+      def xsend(struct) when is_list(struct) do
+        struct = Single
+                 |> struct(struct |> add_config_data)
+                 |> struct_to_form_map
+
+        Http.post(@xsend_url, {:form, struct})
       end
 
       @doc """
       Send lots of sms with `multixsend`
       """
-      def multixsend(struct) do
-        struct = struct |> add_config_data
-        data = struct(Multi, struct) |> struct_to_form
-        Http.post(@multixsend_url, data)
+      def multixsend(struct) when is_list(struct) do
+        struct = Multi
+                 |> struct(struct |> add_config_data)
+                 |> struct_to_form_map
+
+        Http.post(@multixsend_url, {:form, struct})
       end
 
       defp add_config_data(struct) do
         struct
-        |> Map.put_new(:project, project)
-        |> Map.put_new(:appid, appid)
-        |> Map.put_new(:signature, appkey)
+        |> Keyword.put_new(:project, project)
+        |> Keyword.put_new(:appid, appid)
+        |> Keyword.put_new(:signature, appkey)
       end
     end
   end
