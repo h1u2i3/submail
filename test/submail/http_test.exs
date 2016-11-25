@@ -65,18 +65,6 @@ defmodule Submail.HttpTest do
     unload_hackney_meck
   end
 
-  test "check multipart post" do
-    #result = Http.post(@post, {:multipart, [{:file, "/etc/hosts", { ["form-data"], [name: "\"attachmens[]\""] }, []}, foo: "bar"]})
-    #result = Http.post(@post, {:multipart, [{:file, "test/test_helper.exs"}, {"name", "value"}]})
-    #result = System.cmd("curl", ~w<http://localhost:8080/post -F foo=bar -F attachments[]=@/Users/xiaohui/Desktop/y.jpg>)
-    result = Http.post(@post, {:multipart, [{"signature", "bed98302d2d8ad842fe07d88bc2e1be5"}, {"appid", "11885"},
-                              {:file, "/Users/xiaohui/Desktop/y.jpg",
-                                {["form-data"], [name: "\"attachments[]\"", filename: "\"/Users/xiaohui/Desktop/y.jpg\""]}, []}, {"subject", "Test Mail"},
-   {"text", "Hello!"}, {"from", "support@yimei.io"}, {"to", "286390860@qq.com"}]})
-    # result = Http.post @post, {:multipart, [{:file, "/etc/hosts", { ["form-data"], [name: "\"photo\"", filename: "\"/etc/hosts\""]},[]}]}
-    refute result
-  end
-
   defp make_hackney_meck do
     new :hackney
     reason = {:closed, "Something happened"}
