@@ -3,8 +3,7 @@ defmodule Submail.Email.Base do
   Define the methods needed for send email.
   You can use this module to build you own module to send email,
   normally one project should build a module.
-
-      defmodule Email.Welcome do
+defmodule Email.Welcome do
         use Submail, appid: "appid", appkey: "appkey"
         use Submail.Email, project: "project"
       end
@@ -105,6 +104,21 @@ defmodule Submail.Email.Base do
         else
           Http.post(@send_url, {:form, struct})
         end
+      end
+
+      @doc """
+      Send email through xsend method.
+      """
+      def xsend(struct) when is_list(struct) do
+        struct = struct
+                 |> Keyword.put_new(:appid, appid)
+                 |> Keyword.put_new(:singature, appkey)
+                 |> Keyword.put_new(:project, project)
+
+        struct = struct(XMail, struct)
+                 |> to_form_map
+
+        Http.post(@xsend_url, {:form, struct})
       end
 
       defp to_string_key(struct) when is_list(struct) do
