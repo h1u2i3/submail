@@ -22,14 +22,14 @@ defmodule Submail do
       @doc """
       Helper method to add target.
       """
-      def add_appid(struct, appid_string) when is_map(struct) do
+      def add_appid(struct, appid_string) when is_list(struct) do
         [{:appid, appid_string} | struct]
       end
 
       @doc """
       Helper method to add message.
       """
-      def add_appkey(struct, appkey_string) when is_map(struct) do
+      def add_appkey(struct, appkey_string) when is_list(struct) do
         [{:appkey, appkey_string} | struct]
       end
     end
